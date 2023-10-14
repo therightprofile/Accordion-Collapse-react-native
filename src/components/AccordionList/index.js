@@ -1,5 +1,5 @@
-import React, {useState, useEffect, useMemo} from 'react';
-import {FlatList} from 'react-native';
+import React, { useState, useEffect, useMemo } from 'react';
+import { FlatList } from 'react-native';
 import get from 'lodash.get';
 import Collapse from '../Collapse';
 import CollapseBody from '../CollapseBody';
@@ -55,11 +55,46 @@ const AccordionList = React.forwardRef(
       setSelected(_expandedKey);
     }, [_expandedKey]);
 
-    return (
-      <FlatList
+
+
+    {
+      mergeList.map((item, index) => {
+        const isElementExpanded = _keyExtractor(item, index) === selected;
+        return (
+          <Collapse
+            key={_keyExtractor(item, index)} // Make sure to provide a unique key
+            isExpanded={isElementExpanded}
+            onToggle={isExpanded => {
+              const newlySelected = _keyExtractor(item, index);
+              onToggle(newlySelected, index, isExpanded);
+              setSelected(
+                isExpanded && !isNil(newlySelected)
+                  ? newlySelected
+                  : undefined,
+              );
+            }}
+            disabled={isDisabled(item, index)}
+          >
+            <CollapseHeader>
+              {header(item, index, isElementExpanded)}
+            </CollapseHeader>
+            <CollapseBody>
+              {body(item, index, isElementExpanded)}
+            </CollapseBody>
+          </Collapse>
+        );
+      })
+    }
+
+
+
+
+
+
+    {/*<FlatList
         ref={ref}
         data={mergeList}
-        renderItem={({item, index}) => {
+        renderItem={({ item, index }) => {
           const isElementExpanded = _keyExtractor(item, index) === selected;
           return (
             <Collapse
@@ -86,8 +121,8 @@ const AccordionList = React.forwardRef(
         // Do not provide the internal keyExtractor to keep the default warning of react native FlatList
         keyExtractor={keyExtractor}
         {...restProps}
-      />
-    );
+      />*/}
+
   },
 );
 
