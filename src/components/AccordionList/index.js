@@ -55,49 +55,14 @@ const AccordionList = React.forwardRef(
       setSelected(_expandedKey);
     }, [_expandedKey]);
 
-
-
-    {
-      mergeList.map((item, index) => {
-        const isElementExpanded = _keyExtractor(item, index) === selected;
-        return (
-          <Collapse
-            key={_keyExtractor(item, index)} // Make sure to provide a unique key
-            isExpanded={isElementExpanded}
-            onToggle={isExpanded => {
-              const newlySelected = _keyExtractor(item, index);
-              onToggle(newlySelected, index, isExpanded);
-              setSelected(
-                isExpanded && !isNil(newlySelected)
-                  ? newlySelected
-                  : undefined,
-              );
-            }}
-            disabled={isDisabled(item, index)}
-          >
-            <CollapseHeader>
-              {header(item, index, isElementExpanded)}
-            </CollapseHeader>
-            <CollapseBody>
-              {body(item, index, isElementExpanded)}
-            </CollapseBody>
-          </Collapse>
-        );
-      })
-    }
-
-
-
-
-
-
-    {/*<FlatList
-        ref={ref}
-        data={mergeList}
-        renderItem={({ item, index }) => {
+    // Return the mapped components
+    return (
+      <>
+        {mergeList.map((item, index) => {
           const isElementExpanded = _keyExtractor(item, index) === selected;
           return (
             <Collapse
+              key={_keyExtractor(item, index)} // Make sure to provide a unique key
               isExpanded={isElementExpanded}
               onToggle={isExpanded => {
                 const newlySelected = _keyExtractor(item, index);
@@ -108,7 +73,8 @@ const AccordionList = React.forwardRef(
                     : undefined,
                 );
               }}
-              disabled={isDisabled(item, index)}>
+              disabled={isDisabled(item, index)}
+            >
               <CollapseHeader>
                 {header(item, index, isElementExpanded)}
               </CollapseHeader>
@@ -117,12 +83,9 @@ const AccordionList = React.forwardRef(
               </CollapseBody>
             </Collapse>
           );
-        }}
-        // Do not provide the internal keyExtractor to keep the default warning of react native FlatList
-        keyExtractor={keyExtractor}
-        {...restProps}
-      />*/}
-
+        })}
+      </>
+    );
   },
 );
 
